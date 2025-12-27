@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add Expense</h2>
+
+<form class="expense-form">
+    <label>Date</label><br>
+    <input type="date"><br><br>
+
+    <label>Category</label><br>
+    <select>
+        <option>Needs</option>
+        <option>Wants</option>
+        <option>Culturals</option>
+        <option>Unplanned</option>
+    </select><br><br>
+
+    <label>Description</label><br>
+    <input type="text" placeholder="e.g. Lunch"><br><br>
+
+    <label>Amount</label><br>
+    <input type="number" placeholder="Rs"><br><br>
+
+    <button type="submit">Save Expense</button>
+</form>
+{% endblock %}
