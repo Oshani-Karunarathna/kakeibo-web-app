@@ -5,7 +5,11 @@ import os
 app = Flask(__name__)
 
 # Database path
-DB_PATH = os.path.join("database","database.db")
+#DB_PATH = os.path.join("database","database.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "database", "database.db")
+print("APP DB PATH:", DB_PATH)
+
 
 # Database connection fuction
 def get_db_connection():
@@ -16,13 +20,18 @@ def get_db_connection():
 # Dashboard route
 @app.route("/")
 def dashboard():
-    return render_template("dashboard.html")
+    conn = get_db_connection()
+    expenses = conn.execute("SELECT * FROM expenses").fetchall()
+    total = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0]
+    print("EXPENSES COUNT:", len(expenses))
+    conn.close()
+    return render_template("dashboard.html", expenses=expenses,total=total or 0,category_totals=[])
 
 # Add Expense Route
 @app.route("/add-expense", methods=["GET", "POST"])
 def add_expense():
     if request.method == "POST":
-        
+
         date = request.form.get("date")
         category = request.form.get("category")
         description = request.form.get("description")
