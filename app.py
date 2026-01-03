@@ -24,8 +24,10 @@ def dashboard():
     expenses = conn.execute("SELECT * FROM expenses").fetchall()
     total = conn.execute("SELECT SUM(amount) FROM expenses").fetchone()[0]
     print("EXPENSES COUNT:", len(expenses))
+
+    category_totals = conn.execute("""SELECT category, SUM(amount) as total FROM expenses GROUP BY category""").fetchall()
     conn.close()
-    return render_template("dashboard.html", expenses=expenses,total=total or 0,category_totals=[])
+    return render_template("dashboard.html", expenses=expenses,total=total or 0,category_totals=category_totals)
 
 # Add Expense Route
 @app.route("/add-expense", methods=["GET", "POST"])
